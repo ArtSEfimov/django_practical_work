@@ -81,6 +81,14 @@ WSGI_APPLICATION = 'to_do_list_project.wsgi.application'
 
 DATABASES = {
     'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'to_do',
+        'USER': 'to_do',
+        'PASSWORD': os.getenv('POSTGRESQL_PASSWORD'),
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+    },
+    'old_db': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
