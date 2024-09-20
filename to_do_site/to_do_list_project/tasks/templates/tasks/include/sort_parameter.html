@@ -1,0 +1,17 @@
+<form class="sort-form">
+
+    <!-- Скрытое поле для сохранения текущего значения another_sort_key -->
+    <input type="hidden" name="another_sort_key" value="{{ request.GET.another_sort_key }}">
+
+
+    <label for="sort_key">Сортировать по:</label>
+    <select name="sort_key" id="sort_key">
+        <option value="title" {% if request.GET.sort_key == "title" %}selected{% endif %}>Имя</option>
+        <option value="-title" {% if request.GET.sort_key == "-title" %}selected{% endif %}>Имя (по убыванию)</option>
+        <option value="creation_date" {% if request.GET.sort_key == "creation_date" or not request.GET.sort_key %}selected{% endif %}>Дата создания</option>
+        <option value="-creation_date" {% if request.GET.sort_key == "-creation_date" %}selected{% endif %}>Дата создания (по убыванию)</option>
+        <option value="-priority" {% if request.GET.sort_key == "-priority" %}selected{% endif %}>Приоритет</option>
+        <option value="priority" {% if request.GET.sort_key == "priority" %}selected{% endif %}>Приоритет (по убыванию)</option>
+    </select>
+    <button type="submit">Применить</button>
+</form>

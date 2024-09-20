@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <h2>Регистрация</h2>
+
+  {% with form=user_form %}
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="{{ form.username.id_for_label }}">Имя пользователя:</label>
+      {{ form.username }}
+      {% if form.username.errors %}
+        <div class="error">{{ form.username.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="form-group">
+      <label for="{{ form.email.id_for_label }}">Электронная почта:</label>
+      {{ form.email }}
+      {% if form.email.errors %}
+        <div class="error">{{ form.email.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="form-group">
+      <label for="{{ form.password1.id_for_label }}">Пароль:</label>
+      {{ form.password1 }}
+      {% if form.password1.errors %}
+        <div class="error">{{ form.password1.errors }}</div>
+      {% endif %}
+    </div>
+    <div class="form-group">
+      <label for="{{ form.password2.id_for_label }}">Подтверждение пароля:</label>
+      {{ form.password2 }}
+      {% if form.password2.errors %}
+        <div class="error">{{ form.password2.errors }}</div>
+      {% endif %}
+    </div>
+
+    <!-- Кастомная кнопка выбора файла с добавлением span для отображения имени файла -->
+    <div class="form-group">
+        <label>Фото профиля:</label>
+        <div class="custom-file-upload">
+          <input type="file" id="profile_image" name="profile_image" onchange="updateFileName(this)">
+          Выбрать файл
+        </div>
+        <span id="file-name">Файл не выбран</span>
+        {% if user_image_form.profile_image.errors %}
+          <div class="error">{{ user_image_form.profile_image.errors }}</div>
+        {% endif %}
+    </div>
+
+    <button type="submit">Зарегистрироваться</button>
+  </form>
+  {% endwith %}
+{% endblock %}
+
+{% block style %}
+  <link rel="stylesheet" href="{% static 'tasks/css/registration_style.css' %}">
+{% endblock %}
+
+{% block extra_static %}
+<script src="{% static 'tasks/js/button_script.js' %}" defer></script>
+{% endblock %}

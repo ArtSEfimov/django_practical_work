@@ -1,0 +1,50 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+    text-align: center;
+}
+
+header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 20px;
+}
+
+.container {
+    padding: 20px;
+}
+
+/* Стили для заголовка <h2> */
+h2 {
+    margin-bottom: 40px; /* Увеличение отступа снизу для создания большего пространства после заголовка */
+}
+
+/* Стили для параграфов */
+p {
+    font-size: 1.2em; /* Увеличение размера шрифта */
+    line-height: 1.8; /* Увеличение межстрочного интервала для создания большего "воздуха" */
+    margin-bottom: 30px; /* Увеличение отступа снизу для разделения абзацев */
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 20px;
+    color: white;
+    background-color: #4CAF50;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    margin: 10px;
+}
+
+.button:hover {
+    background-color: #45a049;
+}

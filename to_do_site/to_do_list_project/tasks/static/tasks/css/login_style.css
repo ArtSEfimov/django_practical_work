@@ -1,0 +1,82 @@
+/* Стили для формы входа */
+.login-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 40px auto;
+    width: 100%;
+    max-width: 350px;
+    padding: 20px;
+}
+
+.heading {
+    font-size: 26px;
+    margin-bottom: 15px;
+    color: #222;
+    font-family: 'Arial', sans-serif;
+}
+
+.login-form {
+    width: 100%;
+}
+
+button#button-login {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    font-size: 16px;
+}
+
+button#button-login:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+/* Стили для ссылки "Забыли пароль?" */
+.forgot-password {
+    margin-top: 10px;
+}
+
+.forgot-password a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+}
+
+/* Стили для выравнивания кнопок авторизации через GitHub и Google */
+.social-login {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Отступ между кнопками */
+    width: 100%;
+    margin-top: 15px;
+}
+
+.github-login, .google-login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: auto;
+    text-align: center; /* Выровнять текст по центру */
+}
+
+#github-auth, #google-auth {
+    width: 50px;
+    height: auto;
+}
+
+.github-text, .google-text {
+    margin-top: 5px;
+    font-size: 12px;
+    color: #555;
+    text-align: center; /* Центрировать текст под изображениями */
+}

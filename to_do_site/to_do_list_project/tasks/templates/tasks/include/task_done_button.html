@@ -1,0 +1,17 @@
+<form action="{% url 'tasks:complete_task' task.id %}" method="post" style="display:inline;">
+    {% csrf_token %}
+    <input type="hidden" name="task_status" value="0">
+    <div class="task-done-button-container">
+        <label>
+            <input type="checkbox" name="task_status" value="1" onchange="this.form.submit()"
+                   {% if task.status == 1 %}checked{% endif %}>
+            <span>
+                {% if task.status == 1 %}
+                    Задача выполнена
+                {% else %}
+                    Задача не выполнена
+                {% endif %}
+            </span>
+        </label>
+    </div>
+</form>

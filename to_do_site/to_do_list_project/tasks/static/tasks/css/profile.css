@@ -1,0 +1,108 @@
+.profile-container {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-header h1 {
+    font-size: 2em;
+    color: #333;
+}
+
+.profile-card {
+    display: flex;
+    align-items: center;
+    background: #fafafa;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.profile-image {
+    flex-shrink: 0;
+}
+
+.profile-image img {
+    border-radius: 50%;
+    width: 130px;
+    height: 130px;
+    object-fit: cover;
+    border: 2px solid #1e90ff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.profile-image img:hover {
+    transform: scale(1.03);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.profile-info {
+    margin-left: 20px;
+    flex: 1;
+}
+
+.profile-info h2 {
+    font-size: 1.6em;
+    margin: 0 0 10px;
+    color: #222;
+}
+
+.profile-info p {
+    margin: 6px 0;
+    font-size: 1em;
+    color: #555;
+}
+
+.profile-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.button {
+    display: flex; /* Flexbox для кнопок */
+    align-items: center; /* Центрирование текста по вертикали */
+    justify-content: center; /* Центрирование текста по горизонтали */
+    width: 140px; /* Фиксированная ширина для одинакового размера кнопок */
+    height: 40px; /* Фиксированная высота для кнопок */
+    padding: 10px 20px;
+    color: #ffffff;
+    background-color: #007bff;
+    border-radius: 4px;
+    text-decoration: none;
+    text-align: center;
+    font-size: 1em;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.button:hover {
+    background-color: #0056b3;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.edit-profile-button {
+    background-color: #28a745;
+}
+
+.edit-profile-button:hover {
+    background-color: #218838;
+}
+
+.change-password-button {
+    background-color: #007bff;
+}
+
+.change-password-button:hover {
+    background-color: #0056b3;
+}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Словарь с переводами">
+    <title>Словарь</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+            text-align: center;
+        }
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px;
+        }
+        .container {
+            padding: 20px;
+        }
+        .words_list {
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+        .words_list th, .words_list td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        .words_list th {
+            background-color: #007BFF;
+            color: white;
+        }
+        .words_list tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .words_list caption {
+            margin: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+{% load custom_filters %}
+    <header>
+        <h1>Словарь</h1>
+    </header>
+    <div class="container">
+        <table class="words_list">
+            <caption>Слова и переводы</caption>
+            <thead>
+                <tr>
+                    <th>Слово</th>
+                    <th>Перевод</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for word1, word2 in words_1|zip_lists:words_2 %}
+                <tr>
+                    <td>{{ word1 }}</td>
+                    <td>{{ word2 }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+</body>
+</html>

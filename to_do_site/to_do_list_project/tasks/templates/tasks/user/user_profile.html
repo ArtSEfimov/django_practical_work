@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load custom_tags %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'tasks/css/profile.css' %}">
+{% endblock %}
+
+{% block title %}{{ user_profile.username }}'s Profile{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <header class="profile-header">
+        <h1>{{ user_profile.username }}'s Profile</h1>
+    </header>
+
+    <div class="profile-card">
+        <div class="profile-image">
+            {% with user_profile|get_picture as user_picture %}
+            {% if user_picture %}
+                <img src="{{ user_picture.url }}" alt="Profile Image">
+            {% else %}
+                <img src="{% static 'tasks/img/default-profile.png' %}" alt="Default Profile Image">
+            {% endif %}
+            {% endwith %}
+        </div>
+        <div class="profile-info">
+            <h2>{{ user_profile.username }}</h2>
+            {% about_include user_profile as about_user %}
+            {% if about_user %}
+            <p><strong>О себе:</strong> {{ about_user }}</p>
+            {% endif %}
+            <p><strong>Email:</strong> {{ user_profile.email }}</p>
+            <p><strong>Всего задач:</strong> {{ tasks }}</p>
+            <p><strong>Выполненных задач:</strong> {{ completed_tasks }}</p>
+            <!-- Добавьте другие поля профиля здесь -->
+        </div>
+    </div>
+
+    <div class="profile-buttons">
+        <a href="{% url 'tasks:edit_profile' %}" class="button edit-profile-button">Редактировать профиль</a>
+        <a href="{% url 'tasks:change_password' %}" class="button change-password-button">Сменить пароль</a>
+    </div>
+</div>
+{% endblock %}

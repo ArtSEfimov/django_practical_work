@@ -1,0 +1,16 @@
+/* Стили для элементов задачи с приоритетом */
+.task-item.priority-3 {
+    background-color: #ffcccc; /* Красный цвет для приоритета 3 */
+}
+
+.task-item.priority-2 {
+    background-color: #fff5cc; /* Желтый цвет для приоритета 2 */
+}
+
+.task-item.priority-1 {
+    background-color: #ccffcc; /* Зеленый цвет для приоритета 1 */
+}
+
+.task-item.priority-none {
+    background-color: #ffffff; /* Белый цвет, если приоритет отсутствует */
+}

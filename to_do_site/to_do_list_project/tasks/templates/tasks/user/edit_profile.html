@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <h2>Редактирование информации пользователя</h2>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- Поле для ввода имени пользователя -->
+    <div class="form-group">
+      <label for="{{ user_form.username.id_for_label }}">Имя пользователя:</label>
+      {{ user_form.username }}
+      {% if user_form.username.errors %}
+        <div class="error">{{ user_form.username.errors }}</div>
+      {% endif %}
+    </div>
+
+    <!-- Поле для ввода email -->
+    <div class="form-group">
+      <label for="{{ user_form.email.id_for_label }}">Электронная почта:</label>
+      {{ user_form.email }}
+      {% if user_form.email.errors %}
+        <div class="error">{{ user_form.email.errors }}</div>
+      {% endif %}
+    </div>
+
+    <!-- Поле для добавления информации о себе -->
+    <div class="form-group">
+      <label for="{{ user_advanced_form.about.id_for_label }}">О себе:</label>
+      {{ user_advanced_form.about }}
+      {% if user_advanced_form.about.errors %}
+        <div class="error">{{ user_advanced_form.about.errors }}</div>
+      {% endif %}
+    </div>
+
+    <!-- Отображение изображения профиля или текст, если оно отсутствует -->
+    <div class="form-group">
+      {% if user_advanced_form.instance.profile_image %}
+        <img src="{{ user_advanced_form.instance.profile_image.url }}" alt="Профиль">
+        <div>
+          <label for="delete_profile_image">Удалить фото профиля:</label>
+          {{ user_advanced_form.delete_profile_image }}
+        </div>
+      {% else %}
+        <p>Фото профиля отсутствует</p>
+      {% endif %}
+    </div>
+
+    <!-- Поле для загрузки изображения -->
+    <div class="form-group">
+      <label for="{{ user_advanced_form.profile_image.id_for_label }}">Новое изображение профиля:</label>
+      <input type="file" name="profile_image" id="{{ user_advanced_form.profile_image.id_for_label }}" class="form-control-file">
+      {% if user_advanced_form.profile_image.errors %}
+        <div class="error">{{ user_advanced_form.profile_image.errors }}</div>
+      {% endif %}
+    </div>
+
+    <!-- Кнопка для сохранения изменений -->
+<button type="submit" class="btn-save">Сохранить изменения</button>
+
+  </form>
+{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'tasks/css/edit_profile.css' %}">
+{% endblock %}

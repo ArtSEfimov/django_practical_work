@@ -1,0 +1,61 @@
+<!-- base.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}To-Do List{% endblock %}</title>
+    {% load static %}
+    <!-- Подключаем Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'tasks/css/base_style.css' %}">
+    <link rel="stylesheet" href="{% static 'tasks/css/search_form.css' %}">
+    <link rel="stylesheet" href="{% static 'tasks/css/button_style.css' %}">
+    {% block style %}{% endblock %}
+</head>
+<body>
+    <div class="layout">
+        <div class="sidebar">
+            <h2><a href="{% url 'tasks:all_tasks' %}" class="logo-link">Главная</a></h2>
+            <ul>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'tasks:all_tasks' %}">Список задач</a></li>
+                    <li><a href="{% url 'tasks:create_task' %}">Добавить задачу</a></li>
+                    <li><a href="{% url 'tasks:user_profile' %}">Профиль</a></li>
+                    <li>
+                        <form action="{% url 'tasks:logout' %}" method="post" class="logout-form">
+                            {% csrf_token %}
+                            <button type="submit" class="logout-button">Выйти</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li><a href="{% url 'tasks:register' %}">Регистрация</a></li>
+                    <a href="{% url 'tasks:login' %}" class="login-button">Войти</a>
+                {% endif %}
+            </ul>
+
+            {% if user.is_authenticated %}
+            <div class="tags-section">
+                <h2>Теги</h2>
+                <ul>
+                    {% for tag in actual_tags %}
+                        <li><a href="{{ tag.get_absolute_url }}">{{ tag.tag }}</a></li>
+                    {% empty %}
+                        <li>Теги не найдены</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+        <div class="main-content">
+            <div class="container">
+                {% block content %}
+                <!-- Контент будет определяться в дочерних шаблонах -->
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+    {% block extra_static %}
+    {% endblock %}
+</body>
+</html>

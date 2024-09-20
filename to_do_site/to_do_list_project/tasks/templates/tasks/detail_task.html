@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'tasks/css/detail_task.css' %}">
+{% endblock %}
+
+<div class="task-detail-container">
+    <div class="task-header">
+        <h1 class="task-title">{{ task.title }}</h1>
+        <p class="task-meta">Создана: {{ task.creation_date }}</p>
+    </div>
+
+    <!-- Отображение приоритета -->
+    <div class="task-priority">
+        <p>Приоритет: {{ task.get_priority_display|default:"Не установлен" }}</p>
+    </div>
+
+    <!-- Срок выполнения задачи -->
+    <div class="task-deadline">
+        <p>Срок выполнения: {% if task.deadline %}{{ task.deadline|date:"d.m.Y H:i" }}{% else %}не установлен{% endif %}</p>
+    </div>
+
+    <!-- Описание задачи -->
+    <div class="task-description">
+        <h2>Описание:</h2>
+        <p>{{ task.description }}</p>
+    </div>
+
+    <!-- Статус задачи -->
+    <div class="task-status">
+        <p>Статус: {{ task.get_status_display }}</p>
+        {% if task.status == 1 %}
+        <p class="task-complete">Завершена: {{ task.complete_date }}</p>
+        {% endif %}
+    </div>
+
+    <!-- Отображение тегов -->
+    <div class="task-tags">
+        <h2>Теги:</h2>
+        {% if tags %}
+        <ul>
+            {% for tag in tags %}
+            <li><a href="{% url 'tasks:show_by_tags' tag.slug %}">{{ tag }}</a></li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>Теги отсутствуют.</p>
+        {% endif %}
+    </div>
+
+    <!-- Блок действий -->
+    <div class="task-actions">
+        {% if request.user == task.user %}
+        <a href="{% url 'tasks:edit_task' task.id %}" class="task-action">Редактировать</a>
+        {% endif %}
+        <a href="{% url 'tasks:all_tasks' %}" class="task-action">Назад к списку</a>
+    </div>
+</div>
+
+<div>
+    {% if comments %}
+<!-- Отображение комментариев -->
+<ul class="comments-list">
+    {% for comment in comments %}
+    <li class="comment-item">
+        <div class="comment-author-image">
+            <img src="{{ comment.creator_user.advancedprofile.profile_image.url }}"
+                 alt="Фото {{ comment.creator_user }}" class="author-image">
+        </div>
+        <div>
+            <p class="comment-text">{{ comment.comment }}</p>
+            <p class="comment-meta">Автор: {{ comment.creator_user }} | Дата: {{ comment.creation_date }}</p>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p class="no-comments">Комментариев пока нет</p>
+{% endif %}
+
+</div>
+
+<!-- Форма комментариев -->
+<div class="comments-form">
+    <h2>Оставить комментарий</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form_comment.non_field_errors }}
+            {{ form_comment.comment.label_tag }}
+            {{ form_comment.comment }}
+            {{ form_comment.comment.errors }}
+        </div>
+        <button type="submit" class="btn-primary">Добавить комментарий</button>
+    </form>
+</div>
+
+{% endblock %}

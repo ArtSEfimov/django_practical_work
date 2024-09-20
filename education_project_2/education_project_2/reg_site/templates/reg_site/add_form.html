@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Note</title>
+</head>
+<body>
+    <h1>Create a Note</h1>
+    <form method="post">
+        <!-- CSRF Token for security -->
+       {% csrf_token %}
+
+        <!-- Note text field -->
+        <label for="note-text">Note Text:</label><br>
+        <textarea id="note-text" name="note-text" rows="4" cols="50" required></textarea><br>
+
+        <!-- Submit button -->
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

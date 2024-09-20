@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="login-wrapper">
+    <h2 class="heading">Вход</h2>
+    <form method="post" class="login-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" id="button-login">Войти</button>
+    </form>
+    <p class="forgot-password">
+        <a href="{% url 'password_reset' %}">Забыли пароль?</a>
+    </p>
+
+    <!-- Блок с кнопками GitHub и Google в одну строку -->
+    <div class="social-login">
+        <div class="github-login">
+            <a href="{% url 'social:begin' 'github' %}">
+                <img id="github-auth" src="{% static 'tasks/img/github_auth.jpg' %}" alt="Войти через GitHub">
+                <p class="github-text">Войти через GitHub</p>
+            </a>
+        </div>
+
+        <div class="google-login">
+            <a href="{% url 'social:begin' 'google-oauth2' %}">
+                <img id="google-auth" src="{% static 'tasks/img/google_auth.png' %}" alt="Войти через Google">
+                <p class="google-text">Войти через Google</p>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'tasks/css/login_style.css' %}">
+<link rel="stylesheet" href="{% static 'tasks/css/login_button.css' %}">
+{% endblock %}

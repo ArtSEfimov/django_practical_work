@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Добавьте новую задачу{% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'tasks/css/add_task.css' %}">
+{% endblock %}
+
+{% block content %}
+<h2 class="form-title">Добавьте новую задачу</h2>
+<form method="post" class="post-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <!-- Дополнительное поле с поддержкой множественного выбора -->
+    <div class="extra-form-fields">
+        <details>
+            <summary>Выберите теги или добавьте собственные:</summary>
+            {% if all_db_tags %}
+            <div class="tag-selection">
+                <select id="db_tags" name="db_tags" multiple size="{{ all_db_tags|length }}">
+                    {% for tag in all_db_tags %}
+                    <option value="{{ tag }}" {% if tag in selected_tags %}selected{% endif %}>{{ tag }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% else %}
+            <p>Нет доступных тегов. Добавьте свои:</p>
+            {% endif %}
+            <!-- Поле для добавления своих тегов -->
+            <label for="custom_tags">Добавьте свои теги:</label>
+            <input type="text" id="custom_tags" name="custom_tags" placeholder="Введите теги через запятую">
+        </details>
+
+        <!-- Область для отображения выбранных тегов -->
+        <div id="selected-tags-area">
+            {% if selected_tags %}
+            <div class="selected-tags">
+                {% for tag in selected_tags %}
+                <span class="tag">{{ tag }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <button type="submit" class="submit-button">Сохранить</button>
+</form>
+{% endblock %}

@@ -1,0 +1,25 @@
+<form method="post" action="{% url 'tasks:search_task' %}" class="search-form">
+    {% csrf_token %}
+
+    <div class="filter-options">
+        <label class="filter-option">
+            <input type="radio" name="radio_status" value="" {% if status == '' %}checked{% endif %}>
+            Все
+        </label>
+        <label class="filter-option">
+            <input type="radio" name="radio_status" value="1" {% if status == '1' %}checked{% endif %}>
+            Завершенные
+        </label>
+        <label class="filter-option">
+            <input type="radio" name="radio_status" value="0" {% if status == '0' %}checked{% endif %}>
+            Не завершенные
+        </label>
+    </div>
+
+    <div class="form-group">
+        {{ search_form.task.label_tag }}
+        {{ search_form.task }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Поиск</button>
+</form>
