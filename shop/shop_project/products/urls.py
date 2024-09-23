@@ -5,7 +5,7 @@ from products import views
 app_name = 'products'
 
 urlpatterns = [
-    path('', views.products, name='index'),
+    path('', views.IndexView.as_view(), name='index'),
     path('category/<int:category_id>', views.products, name='category'),
     path('page/<int:page_number>', views.products, name='paginator'),
 
