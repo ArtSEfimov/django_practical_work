@@ -29,19 +29,11 @@ class IndexView(TemplateView):
 #     }
 #     return render(request, 'products/index.html', context)
 
-
-class ProductsListView(ListView):
+class CommonListView:
     model = Product
     template_name = 'products/products.html'
 
     paginate_by = 3
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        category_id = self.kwargs.get('category_id')
-        if category_id:
-            return queryset.filter(category__id=category_id)
-        return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
@@ -54,6 +46,24 @@ class ProductsListView(ListView):
         return context
 
 
+class ProductsListView(CommonListView, ListView):
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        category_id = self.kwargs.get('category_id')
+        if category_id:
+            return queryset.filter(category__id=category_id)
+        return queryset
+
+
+class CategoriesListView(CommonListView, ListView):
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        category_id = self.kwargs.get('category_id')
+        if category_id:
+            return queryset.filter(category__id=category_id)
+        return queryset
 
 
 #
