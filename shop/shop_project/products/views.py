@@ -1,10 +1,8 @@
-from django.shortcuts import render
 from django.views.generic import ListView
 from .models import Product, ProductCategory, Basket
 from django.contrib.auth.decorators import login_required
 from django.db.models import F
 from django.http import HttpResponseRedirect
-from django.core.paginator import Paginator
 from django.views.generic.base import TemplateView
 
 
@@ -29,11 +27,15 @@ class IndexView(TemplateView):
 #     }
 #     return render(request, 'products/index.html', context)
 
-class CommonListView:
+
+class ProductsListView(ListView):
     model = Product
     template_name = 'products/products.html'
-
     paginate_by = 3
+
+    def __init__(self, *args, **kwargs):
+        self.category = None
+        super().__init__(*args, **kwargs)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
@@ -43,30 +45,21 @@ class CommonListView:
                 'categories': ProductCategory.objects.all()
             }
         )
+        if self.category:
+            context['category'] = self.category
         return context
 
-
-class ProductsListView(CommonListView, ListView):
-
     def get_queryset(self):
         queryset = super().get_queryset()
         category_id = self.kwargs.get('category_id')
         if category_id:
+            self.category = category_id
             return queryset.filter(category__id=category_id)
         return queryset
 
 
-class CategoriesListView(CommonListView, ListView):
+# FBV
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        category_id = self.kwargs.get('category_id')
-        if category_id:
-            return queryset.filter(category__id=category_id)
-        return queryset
-
-
-#
 # def products(request, category_id=None, page_number=1):
 #     if category_id:
 #         products_by_category = Product.objects.filter(category__id=category_id)
