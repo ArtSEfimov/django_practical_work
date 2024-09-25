@@ -1,61 +1,34 @@
 from django.contrib.auth import get_user_model
-from django.shortcuts import render
-from django.views.generic import CreateView, UpdateView
-from .forms import UserLoginForm, UserRegistrationForm, UserProfileForm
-from django.contrib import auth, messages
-from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
+from django.views.generic import CreateView, UpdateView, TemplateView
+from .forms import UserLoginForm, UserRegistrationForm, UserProfileForm
+from django.urls import reverse_lazy, reverse
 from products.models import Basket
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView
+from django.contrib.messages.views import SuccessMessageMixin
+from common.views import TitleMixin
+from .models import EmailVerification
 
 
-# Create your views here.
-def login(request):
-    if request.method == 'POST':
-        form = UserLoginForm(data=request.POST)
-        if form.is_valid():
-            username = request.POST['username']
-            password = request.POST['password']
-            user = auth.authenticate(username=username,
-                                     password=password)
-            if user:
-                auth.login(request, user)
-                return HttpResponseRedirect(reverse('index'))
-
-    else:
-        form = UserLoginForm()
-    context = {
-        'form': form
-    }
-    return render(request, 'users/login.html', context=context)
+class UserLoginView(TitleMixin, LoginView):
+    template_name = 'users/login.html'
+    form_class = UserLoginForm
+    title = 'Store - Авторизация'
 
 
-class UserRegistrationView(CreateView):
+class UserRegistrationView(TitleMixin, SuccessMessageMixin, CreateView):
     template_name = 'users/registration.html'
     form_class = UserRegistrationForm
     success_url = reverse_lazy('users:login')
-    extra_context = {'title': 'Регистрация'}
+    title = 'Store - Регистрация'
+    success_message = 'Вы успешно зарегистрировались!'
 
 
-# def registration(request):
-#     if request.method == 'POST':
-#         form = UserRegistrationForm(request.POST)
-#         if form.is_valid():
-#             messages.success(request, 'Вы успешно зарегистрировались! ')
-#             form.save()
-#             return HttpResponseRedirect(reverse('users:login'))
-#     else:
-#         form = UserRegistrationForm()
-#     context = {
-#         'form': form
-#     }
-#     return render(request, 'users/registration.html', context)
-
-class UserProfileView(UpdateView):
+class UserProfileView(TitleMixin, UpdateView):
     model = get_user_model()
     form_class = UserProfileForm
     template_name = 'users/profile.html'
-    extra_context = {'title': 'Store - Личный кабинет'}
+    title = 'Store - Личный кабинет'
 
     def get_success_url(self):
         return reverse_lazy('users:profile', args=(self.request.user.id,))
@@ -71,27 +44,17 @@ class UserProfileView(UpdateView):
         return context
 
 
-# @login_required
-# def profile(request):
-#     if request.method == 'POST':
-#         form = UserProfileForm(instance=request.user, data=request.POST, files=request.FILES)
-#         if form.is_valid():
-#             form.save()
-#             return HttpResponseRedirect(reverse('users:profile'))
-#     else:
-#         form = UserProfileForm(instance=request.user)
-#
-#     baskets = Basket.objects.filter(user=request.user)
-#
-#     context = {
-#         'title': 'Store - Профиль',
-#         'form': form,
-#         'baskets': baskets,
-#
-#     }
-#     return render(request, 'users/profile.html', context)
+class EmailVerificationView(TitleMixin, TemplateView):
+    title = 'Store - Подтверждение электронной почты'
+    template_name = 'users/email_verification.html'
 
+    def get(self, request, *args, **kwargs):
+        code = kwargs.get('code')
+        user = get_user_model().objects.get(email=kwargs.get('email'))
+        email_verifications = EmailVerification.objects.filter(user=user, code=code)
+        if email_verifications.exists() and not email_verifications.first().is_expired():
+            user.is_verified_email = True
+            user.save()
+            return super().get(request, *args, **kwargs)
 
-def logout(request):
-    auth.logout(request)
-    return HttpResponseRedirect(reverse('index'))
+        return HttpResponseRedirect(reverse('index'))
