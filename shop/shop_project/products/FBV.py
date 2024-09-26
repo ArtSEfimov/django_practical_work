@@ -1,8 +1,7 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render
 
-from products.models import ProductCategory, Product
-
+from products.models import Product, ProductCategory
 
 # FBV for products_app
 

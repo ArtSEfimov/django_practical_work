@@ -5,8 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from products.models import Basket
-from users.forms import UserLoginForm, UserRegistrationForm, UserProfileForm
-
+from users.forms import UserLoginForm, UserProfileForm, UserRegistrationForm
 
 # FBV for users_app
 
