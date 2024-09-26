@@ -7,6 +7,7 @@ from django.urls import reverse
 from products.models import Basket
 from users.forms import UserLoginForm, UserProfileForm, UserRegistrationForm
 
+
 # FBV for users_app
 
 def login(request):
