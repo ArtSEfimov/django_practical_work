@@ -3,6 +3,7 @@ from django.db.models import F
 from django.http import HttpResponseRedirect
 from django.views.generic import ListView
 from django.views.generic.base import TemplateView
+from django.core.cache import cache
 
 from common.views import TitleMixin
 
@@ -26,11 +27,20 @@ class ProductsListView(TitleMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(object_list=None, **kwargs)
-        context.update(
-            {
-                'categories': ProductCategory.objects.all()
-            }
-        )
+        categories = cache.get('categories')
+        if categories:
+            context.update(
+                {
+                    'categories': categories
+                }
+            )
+        else:
+            context.update(
+                {
+                    'categories': ProductCategory.objects.all()
+                }
+            )
+            cache.set('categories', context['categories'], 30)
         if self.category:
             context['category'] = self.category
         return context
