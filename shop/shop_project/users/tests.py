@@ -8,7 +8,6 @@ from django.utils import timezone
 
 from .models import EmailVerification
 
-
 # Create your tests here.
 
 class UserRegistrationViewTestCase(TestCase):
