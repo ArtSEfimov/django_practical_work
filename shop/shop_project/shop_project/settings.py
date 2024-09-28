@@ -14,11 +14,9 @@ import os.path
 import environ
 from pathlib import Path
 
-from .select_cache import *
-
 env = environ.Env(
     DEBUG=(bool,),
-    SECRET_KEY=(str),
+    SECRET_KEY=(str,),
     DOMAIN_NAME=(str,),
     REDIS_HOST=(str,),
     REDIS_PORT=(str,),
@@ -26,7 +24,7 @@ env = environ.Env(
     DATABASE_USER=(str,),
     DATABASE_PASSWORD=(str,),
     DATABASE_HOST=(str,),
-    DATABASE_PORT=(int,),
+    DATABASE_PORT=(str,),
     EMAIL_HOST=(str,),
     EMAIL_PORT=(int,),
     EMAIL_HOST_USER=(str,),
@@ -83,6 +81,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.github',
 
     'debug_toolbar',
+    'django_extensions',
 
 ]
 
@@ -126,11 +125,11 @@ WSGI_APPLICATION = 'shop_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'store_db',
-        'USER': 'store_username',
-        'PASSWORD': '1',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': env('DATABASE_NAME'),
+        'USER': env('DATABASE_USER'),
+        'PASSWORD': env('DATABASE_PASSWORD'),
+        'HOST': env('DATABASE_HOST'),
+        'PORT': env('DATABASE_PORT'),
     },
 }
 
@@ -167,10 +166,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = '/static/'
-
-STATICFILES_DIRS = [
-    BASE_DIR / 'static'
-]
+if DEBUG:
+    STATICFILES_DIRS = [
+        BASE_DIR / 'static'
+    ]
+else:
+    STATIC_ROOT = BASE_DIR / 'static'
 
 # MEDIA_FILES
 
@@ -216,8 +217,28 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
+# Cache
+
 REDIS_HOST = env('REDIS_HOST')
 REDIS_PORT = env('REDIS_PORT')
+
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django_redis.cache.RedisCache',
+#         'LOCATION': f'redis://{REDIS_HOST}:{REDIS_PORT}/1',
+#         'OPTIONS': {
+#             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+#         },
+#         'KEY_PREFIX': 'store'
+#     }
+# }
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
 
 # Celery
 
