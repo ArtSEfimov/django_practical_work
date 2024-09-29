@@ -82,6 +82,8 @@ INSTALLED_APPS = [
 
     'debug_toolbar',
     'django_extensions',
+    'rest_framework',
+    'api.apps.ApiConfig',
 
 ]
 
@@ -250,3 +252,10 @@ CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
 STRIPE_PUBLIC_KEY = env('STRIPE_PUBLIC_KEY')
 STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
 STRIPE_SECRET = env('STRIPE_SECRET')
+
+# Django REST framework
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 3
+}
