@@ -6,7 +6,6 @@ from django.db import models
 from django.urls import reverse
 from django.utils.timezone import now
 
-
 # Create your models here.
 
 class User(AbstractUser):

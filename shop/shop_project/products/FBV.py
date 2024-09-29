@@ -3,7 +3,6 @@ from django.shortcuts import render
 
 from products.models import Product, ProductCategory
 
-
 # FBV for products_app
 
 def index(request):

@@ -1,6 +1,7 @@
 import stripe
 from django.conf import settings
 from django.db import models
+from django.db.models import F
 
 from users.models import User
 
@@ -104,3 +105,19 @@ class Basket(models.Model):
         }
 
         return basket_item
+
+    @classmethod
+    def create_or_update(cls, product_id, user):
+        product = Product.objects.get(pk=product_id)
+        baskets = Basket.objects.filter(user=user, product=product)
+
+        if not baskets.exists():
+            obj = Basket.objects.create(user=user, product=product, quantity=1)
+            is_created = True
+            return obj, is_created
+        else:
+            basket = baskets.first()
+            basket.quantity = F('quantity') + 1
+            basket.save()
+            is_created = False
+            return basket, is_created

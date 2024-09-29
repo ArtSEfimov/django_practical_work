@@ -1,6 +1,5 @@
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
-from django.db.models import F
 from django.http import HttpResponseRedirect
 from django.views.generic import ListView
 from django.views.generic.base import TemplateView
@@ -56,16 +55,7 @@ class ProductsListView(TitleMixin, ListView):
 
 @login_required
 def basket_add(request, product_id):
-    product = Product.objects.get(pk=product_id)
-    baskets = Basket.objects.filter(user=request.user, product=product)
-
-    if not baskets.exists():
-        Basket.objects.create(user=request.user, product=product, quantity=1)
-    else:
-        basket = baskets.first()
-        basket.quantity = F('quantity') + 1
-        basket.save()
-
+    Basket.create_or_update(product_id, request.user)
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 
