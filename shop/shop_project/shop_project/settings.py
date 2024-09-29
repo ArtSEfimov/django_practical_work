@@ -84,6 +84,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'api.apps.ApiConfig',
+    'rest_framework.authtoken',
 
 ]
 
@@ -256,6 +257,9 @@ STRIPE_SECRET = env('STRIPE_SECRET')
 # Django REST framework
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 3
 }
