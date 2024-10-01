@@ -18,6 +18,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.contrib.sitemaps.views import sitemap
+from drf_spectacular.views import SpectacularAPIView
+
 from blog.sitemaps import PostSitemap
 from django.conf.urls.static import static
 from . import settings
@@ -36,4 +38,5 @@ urlpatterns = [
                   path("accounts/", include("django.contrib.auth.urls")),  # new
                   re_path(r'^oauth/', include('social_django.urls', namespace='social')),
                   path("api-auth/", include("rest_framework.urls")),
+
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
