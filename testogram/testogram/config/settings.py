@@ -35,7 +35,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'rangefilter',
+    'admin_auto_filters',
     'django_extensions',
+    'django_admin_listfilter_dropdown',
 
     'general.apps.GeneralConfig',
 ]

@@ -1,6 +1,10 @@
 from django.contrib import admin
+from django_admin_listfilter_dropdown.filters import ChoiceDropdownFilter
+
+from general.filters import AuthorFilter, PostFilter
 from general.models import User, Post, Reaction, Comment
 from django.contrib.auth.models import Group
+from rangefilter.filters import DateRangeFilter
 
 admin.site.unregister(Group)
 
@@ -38,6 +42,19 @@ class UserModelAdmin(admin.ModelAdmin):
         "last_login",
     )
 
+    search_fields = (
+        "id",
+        "username",
+        "email",
+    )
+
+    list_filter = (
+        "is_staff",
+        "is_superuser",
+        "is_active",
+        ("date_joined", DateRangeFilter),
+    )
+
 
 @admin.register(Post)
 class PostModelAdmin(admin.ModelAdmin):
@@ -49,6 +66,23 @@ class PostModelAdmin(admin.ModelAdmin):
         "created_at",
         'get_comment_count',
     )
+
+    readonly_fields = (
+        "created_at",
+    )
+
+    search_fields = (
+        "id",
+        "title",
+    )
+
+    list_filter = (
+        AuthorFilter,
+        ("created_at", DateRangeFilter),
+    )
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related("comments")
 
     def get_body(self, obj):
         max_length = 64
@@ -79,6 +113,17 @@ class ReactionModelAdmin(admin.ModelAdmin):
         "value",
     )
 
+    list_filter = (
+        PostFilter,
+        AuthorFilter,
+        ("value", ChoiceDropdownFilter),
+    )
+
+    autocomplete_fields = (
+        "author",
+        "post",
+    )
+
 
 @admin.register(Comment)
 class CommentModelAdmin(admin.ModelAdmin):
@@ -89,7 +134,17 @@ class CommentModelAdmin(admin.ModelAdmin):
         "body",
         "created_at",
     )
+
     list_display_links = (
         "id",
         "body",
+    )
+
+    list_filter = (
+        PostFilter,
+        AuthorFilter,
+    )
+
+    raw_id_fields = (
+        "author",
     )
