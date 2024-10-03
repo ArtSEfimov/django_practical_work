@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'admin_auto_filters',
     'django_extensions',
     'django_admin_listfilter_dropdown',
+    'drf_spectacular',
 
     'general.apps.GeneralConfig',
 ]
@@ -126,3 +127,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # User
 
 AUTH_USER_MODEL = 'general.User'
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
