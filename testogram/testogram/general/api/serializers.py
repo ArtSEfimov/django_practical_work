@@ -24,3 +24,31 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+
+
+class UserListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("id", "first_name", "last_name")
+
+
+class UserRetrieveSerializer(serializers.ModelSerializer):
+    is_friend = serializers.SerializerMethodField()
+    friend_count = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "first_name",
+            "last_name",
+            "email",
+            "is_friend",
+            "friend_count",
+        )
+
+    def get_friend_count(self, obj) -> int:
+        return obj.friends.count()
+
+    def get_is_friend(self, obj) -> bool:
+        return obj in self.context["request"].user.friends.all()
