@@ -1,8 +1,11 @@
 from django.contrib.auth.models import User
 from django.core.validators import FileExtensionValidator
 from django.db import models
+from django.urls import reverse
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
+
+from apps.services.utils import unique_slugify
 
 
 # Create your models here.
@@ -17,7 +20,7 @@ class Post(models.Model):
     )
 
     title = models.CharField(verbose_name='Название записи', max_length=255)
-    slug = models.SlugField(verbose_name='URL', max_length=255, blank=True)
+    slug = models.SlugField(verbose_name='URL', max_length=255)
     description = models.TextField(verbose_name='Краткое описание', max_length=500)
     text = models.TextField(verbose_name='Полный текст записи')
 
@@ -26,7 +29,7 @@ class Post(models.Model):
     thumbnail = models.ImageField(default='default.jpg',
                                   verbose_name='Изображение записи',
                                   blank=True,
-                                  upload_to='images/thumbnails/',
+                                  upload_to='images/thumbnails/%Y/%m/%d/',
                                   validators=[
                                       FileExtensionValidator(allowed_extensions=('png', 'jpg', 'webp', 'jpeg', 'gif'))]
                                   )
@@ -48,6 +51,13 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('post_detail', kwargs={'slug': self.slug})
+
+    def save(self, *args, **kwargs):
+        self.slug = unique_slugify(self, self.title, self.slug)
+        super().save(*args, **kwargs)
 
 
 class Category(MPTTModel):
