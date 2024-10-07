@@ -8,7 +8,11 @@ from mptt.models import MPTTModel
 from apps.services.utils import unique_slugify
 
 
-# Create your models here.
+class PostManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().select_related('author', 'category').filter(status='published')
+
+
 class Post(models.Model):
     """
     Модель постов для нашего блога
@@ -41,6 +45,9 @@ class Post(models.Model):
     updater = models.ForeignKey(to=User, verbose_name='Обновил', on_delete=models.SET_NULL, null=True,
                                 related_name='updater_posts', blank=True)
     fixed = models.BooleanField(verbose_name='Прикреплено', default=False)
+
+    objects = models.Manager()
+    custom = PostManager()
 
     class Meta:
         db_table = 'blog_post'
@@ -90,6 +97,12 @@ class Category(MPTTModel):
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
         db_table = 'app_categories'
+
+    def get_absolute_url(self):
+        """
+        Получаем прямую ссылку на категорию
+        """
+        return reverse('post_by_category', kwargs={'slug': self.slug})
 
     def __str__(self):
         """
