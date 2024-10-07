@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from general.models import User
+from general.models import User, Post
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -32,9 +32,21 @@ class UserListSerializer(serializers.ModelSerializer):
         fields = ("id", "first_name", "last_name")
 
 
+class NestedPostListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = (
+            "id",
+            "title",
+            "body",
+            "created_at",
+        )
+
+
 class UserRetrieveSerializer(serializers.ModelSerializer):
     is_friend = serializers.SerializerMethodField()
     friend_count = serializers.SerializerMethodField()
+    posts = NestedPostListSerializer(many=True)
 
     class Meta:
         model = User
