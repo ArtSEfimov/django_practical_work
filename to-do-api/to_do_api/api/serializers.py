@@ -1,5 +1,9 @@
 import json
 
+from rest_framework import serializers
+
+from api.models import TaskModel
+
 
 class TaskSerializer:
     def __init__(self, task_object):
@@ -26,3 +30,12 @@ class TaskSerializer:
         task_json = json.dumps(task_dict, ensure_ascii=False, indent=4)
 
         return task_json
+
+
+class TaskPOSTSerializer(serializers.Serializer):
+    title = serializers.CharField(max_length=128)
+    description = serializers.CharField()
+    is_complete = serializers.BooleanField(default=False, required=False)
+
+    def create(self, validated_data):
+        TaskModel.objects.create(**validated_data)

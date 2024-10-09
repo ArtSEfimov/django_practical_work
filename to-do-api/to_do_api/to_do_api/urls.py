@@ -18,13 +18,14 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from api.views import TaskAPIView
+from api.views import TaskAPIView, TaskCreateAPIView
 
-# router = DefaultRouter()
-# router.register(r'tasks', TaskAPIView, basename='tasks')
+router = DefaultRouter()
+router.register(r'tasks', TaskCreateAPIView, basename='tasks')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/tasks/', TaskAPIView.as_view()),  # Для получения списка задач
-    path('api/tasks/<int:pk>/', TaskAPIView.as_view()),  # Для получения одной
+    path('api/custom/tasks/', TaskAPIView.as_view()),  # Для получения списка задач
+    path('api/custom/tasks/<int:pk>/', TaskAPIView.as_view()),  # Для получения одной
+    path('api/', include(router.urls))
 ]
