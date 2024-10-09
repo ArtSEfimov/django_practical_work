@@ -38,4 +38,4 @@ class TaskPOSTSerializer(serializers.Serializer):
     is_complete = serializers.BooleanField(default=False, required=False)
 
     def create(self, validated_data):
-        TaskModel.objects.create(**validated_data)
+        return TaskModel.objects.create(**validated_data)

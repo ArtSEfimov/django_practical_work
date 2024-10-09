@@ -1,10 +1,11 @@
 import json
 
 from django.http import JsonResponse, HttpResponse
+from rest_framework import viewsets
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.viewsets import ViewSet
+from rest_framework.viewsets import ViewSet, GenericViewSet
 
 from api.models import TaskModel
 from api.serializers import TaskSerializer, TaskPOSTSerializer
@@ -29,9 +30,16 @@ class TaskAPIView(APIView):
 
 
 class TaskCreateAPIView(ViewSet):
-    http_method_names = ['post']
 
-    def post(self, request):
-        serialized_data = TaskPOSTSerializer(request.data)
+    def create(self, request):
+        serialized_data = TaskPOSTSerializer(data=request.data)
         if serialized_data.is_valid(raise_exception=True):
+            serialized_data.save()
             return Response(serialized_data.data)
+
+    def retrieve(self, request, pk):
+        pass
+
+
+class TaskViewSet(GenericViewSet):
+    pass
