@@ -35,7 +35,7 @@ class TaskCreateAPIView(ViewSet):
         serialized_data = TaskPOSTSerializer(data=request.data)
         if serialized_data.is_valid(raise_exception=True):
             serialized_data.save()
-            return Response(serialized_data.data)
+            return Response(serialized_data.validated_data)
 
     def retrieve(self, request, pk):
         pass
