@@ -1,12 +1,15 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db import transaction
-from django.shortcuts import render
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, UpdateView, CreateView
 
 from apps.accounts.forms import ProfileUpdateForm, UserUpdateForm, UserRegisterForm, UserLoginForm
 from apps.accounts.models import Profile
+from apps.blog.forms import CommentCreateForm
 
 
 # Create your views here.
@@ -89,8 +92,11 @@ class UserLoginView(SuccessMessageMixin, LoginView):
         context['title'] = 'Авторизация на сайте'
         return context
 
+
 class UserLogoutView(LogoutView):
     """
     Выход с сайта
     """
     next_page = 'home'
+
+
