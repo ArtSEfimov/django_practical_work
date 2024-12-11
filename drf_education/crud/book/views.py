@@ -1,6 +1,8 @@
+from django.http import Http404
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from book.models import Book
 from book.serializers import BookSerializer
@@ -9,36 +11,41 @@ from book.serializers import BookSerializer
 # Create your views here.
 
 
-@api_view(["get", "post"])
-def books_list(request):
-    if request.method == 'GET':
-        items = Book.objects.all()
-        serializer_books = BookSerializer(items, many=True)
+class BookListView(APIView):
+    def get(self, request):
+        books = Book.objects.all()
+        serializer_books = BookSerializer(books, many=True)
         return Response(serializer_books.data)
-    if request.method == 'POST':
-        serializer_books = BookSerializer(data=request.data)
-        if serializer_books.is_valid():
-            serializer_books.save()
-            return Response(serializer_books.data, status=201)
-        return Response(serializer_books.errors, status=400)
+
+    def post(self, request):
+        serializer_book = BookSerializer(data=request.data)
+        if serializer_book.is_valid():
+            serializer_book.save()
+            return Response(serializer_book.data, status=201)
+        return Response(serializer_book.errors, status=400)
 
 
-@api_view(['get', 'put', 'delete'])
-def book_detail(request, pk):
-    try:
-        book = Book.objects.get(pk=pk)
-    except Book.DoesNotExist:
-        return Response(status=404)
+class BookDetailView(APIView):
+    def get_object(self, pk):
+        try:
+            return Book.objects.get(pk=pk)
+        except Book.DoesNotExist:
+            raise Http404
 
-    if request.method == 'GET':
+    def get(self, request, pk):
+        book = self.get_object(pk)
         serializer_book = BookSerializer(book)
         return Response(serializer_book.data)
-    elif request.method == 'PUT':
+
+    def put(self, request, pk):
+        book = self.get_object(pk)
         serializer_book = BookSerializer(book, data=request.data)
         if serializer_book.is_valid():
             serializer_book.save()
             return Response(serializer_book.data)
         return Response(serializer_book.errors, status=400)
-    elif request.method == 'DELETE':
+
+    def delete(self, request, pk):
+        book = self.get_object(pk)
         book.delete()
         return Response(status=204)
